@@ -1,0 +1,42 @@
+version: "3.8"
+
+services: 
+  dev:
+    image: ocrpytesseract/ocrpytesseract:latest-dev
+    working_dir: /home/ocrpytesseract
+    entrypoint: uvicorn ocrpytesseract.main:app --reload --host 0.0.0.0
+    build: 
+      target: development
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+      - 8000:8000
+    volumes:
+      - .:/home/ocrpytesseract
+    
+    environment: 
+      - MODE=development
+  
+  prod:
+    image: ocrpytesseract/ocrpytesseract:latest-prod
+    working_dir: /production/ocrpytesseract
+    build: 
+      target: production
+      context: .
+      dockerfile: Dockerfile
+  
+  test:
+    image: ocrpytesseract/ocrpytesseract:latest-test
+    working_dir: /home/ocrpytesseract
+    entrypoint: pytest
+    build: 
+      target: testing
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+      - 8000:8000
+    volumes:
+      - .:/home/ocrpytesseract
+    
+    environment: 
+      - MODE=testing
