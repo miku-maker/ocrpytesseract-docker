@@ -11,9 +11,9 @@ from pydantic import BaseModel
 from starlette.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="ocrpytesseract/static"), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
-templates = Jinja2Templates(directory="ocrpytesseract/templates")
+templates = Jinja2Templates(directory="templates")
 
 app.add_middleware(
     CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"]
@@ -44,7 +44,7 @@ async def readFile(request: Request, image_upload: UploadFile = File(...)):
     # template
     FILE_PATH = 'https://i.ibb.co/LhCrxqH/Query.png'
     response = requests.get(FILE_PATH)
-    template_filename = 'ocrpytesseract/static/template.jpg'
+    template_filename = 'static/template.jpg'
 
     with open(template_filename, 'wb') as f:
         f.write(response.content)
